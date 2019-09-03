@@ -1,5 +1,4 @@
 const express = require('express');
-const Posts = require('./data/db.js')
 const postsRouter = require('./api/postsRouter')
 
 const server = express();
