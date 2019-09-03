@@ -89,10 +89,21 @@ router.delete('/posts/:id', (req, res) => {
 
 // ========================= POST /api/posts/:id/comments =========================
 
-/* router.findCommentById('/posts/:id', (req, res) => {
-
+router.post('/posts/:id/comments', (req, res) => {
+    const {text} = req.body;
+    const newComment = {...req.body, "post_id": req.params.id }
+    if (!text) {
+        res.status(400).json({ errorMessage: "Please provide text for the comment." })
+    } else {
+        Posts.insertComment(newComment)
+            .then(inserted => 
+                {
+                    Posts.findCommentById(inserted.id).then(fullComment => res.status(201).json((fullComment)))
+                })
+            .catch(err => res.status(500).json({ error: "There was an error while saving the comment to the database" }))
+    }
 })
- */
+
 // ========================= GET /api/posts/:id/comments =========================
 
 router.get('/posts/:id/comments', (req, res) => {
