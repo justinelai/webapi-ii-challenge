@@ -64,14 +64,27 @@ router.put('/posts/:id', (req, res) => {
         Posts.update(id, req.body)
     .then(post => {
         post === 1 ?
-        res.status(201).json(req.body) :
-        res.status(404).json({ message: "The post with the specified ID does not exist." }) 
+        Posts.findById(id).then(u => res.status(201).json(u)) :
+        res.status(404).json({ message: "The post with the specified ID does not exist." })
     })
     .catch(err => {
         res.status(500).json({ error: "The post information could not be modified." })
     })
     }
 
+})
+
+// ========================= DELETE /api/posts/:id =========================
+
+router.delete('/posts/:id', (req, res) => {
+    const id = req.params.id
+    Posts.remove(id)
+    .then(user => {
+        user ? res.status(200).json(user) : res.status(404).json({ message: "The post with the specified ID does not exist." })
+    })
+    .catch(err => {
+        res.status(500).json({ error: "The post could not be removed" })
+    })
 })
 
 
